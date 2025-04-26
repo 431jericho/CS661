@@ -12,11 +12,10 @@ container.html("");
 const ctrl = container.append("div").attr("class", "team-stats-controls");
 
 // Create input box (team name will be set here)
-ctrl.append("label").attr("for", "team-input").text("Team:");
-const teamInputBox = ctrl.append("input")
-.attr("id", "team-input")
-.attr("type", "text")
-.attr("placeholder", "Select a team…");
+ctrl.append("label")
+.attr("for", "team-dropdown")
+.text("Team:");
+
 
 // Create team dropdown (select from menu)
 const teamDropdown = ctrl.append("div")
@@ -33,7 +32,8 @@ const teamMenu = teamDropdown.append("div")
 const teamsArr = [
 "Mumbai Indians", "Chennai Super Kings", "Royal Challengers Bangalore",
 "Kolkata Knight Riders", "Sunrisers Hyderabad", "Delhi Capitals",
-"Punjab Kings", "Rajasthan Royals", "Lucknow Super Giants", "Gujarat Titans"
+"Punjab Kings", "Rajasthan Royals", "Lucknow Super Giants", "Gujarat Titans","Gujarat Lions",
+"Deccan Chargers", "Kochi Tuskers Kerala", "Rising Pune Supergiants","Pune Warriors"
 ];
 
 // Fill the menu
@@ -90,8 +90,7 @@ seasonDropdown.classed("open", !seasonDropdown.classed("open"));
 
 // When team selected, update input box and close dropdown
 teamMenu.selectAll("input").on("change", function () {
-const selectedTeam = this.value;
-teamInputBox.property("value", selectedTeam); // <<== sets input value
+const selectedTeam = this.value; // <<== sets input value
 teamToggle.text(selectedTeam);
 teamDropdown.classed("open", false);
 });
@@ -133,14 +132,14 @@ const defsArea = resultArea.append("div")
 
 // 3) Fetch & render
 d3.select("#show-stats-btn").on("click", async ()=> {
-  const team = d3.select("#team-input").property("value").trim();
+  const team = teamToggle.text().trim();
   const checked = seasonMenu.selectAll("input").nodes()
     .filter(n=>n.checked).map(n=>n.value);
   const yearsParam = checked.includes("all")
     ? "all"
     : checked.filter(y=>y!=="all").join(",");
 
-  if (!team) {
+  if (!team || team === "Select Team") {
     winlossArea.html("<p>Please enter a team.</p>");
     return;
   }
