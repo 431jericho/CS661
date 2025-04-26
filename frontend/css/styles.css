@@ -147,6 +147,9 @@ body {
   flex-direction: column;
   min-height: 0;
 }
+#chart-team-wins {
+  grid-column: span 2;
+}
 
 /* Module wrappers */
 .batsmen-wrapper,
